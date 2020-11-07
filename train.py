@@ -36,21 +36,22 @@ parser.add_argument('-ngpu',type = int, default = 1,help= 'Number of gpus for CU
 parser.add_argument('-e',type = int, default = 2, help = "Number of epochs" )
 parser.add_argument('-lrd', type = float, default = 0.00005, help ="Learning rate discriminator, default = 0.0005")
 parser.add_argument('-lrg', type = float, default = 0.0002, help ="Learning rate Generator, default = 0.002") 
-parser.add_argument('-oss', type = bool, default = True, help= "one-sided-smoothing")
+parser.add_argument('-one_sided', type = bool, default = True, help= "one-sided-smoothing")
 parser.add_argument('-lr', type = bool, default = False, help ="same learning rate")
 parser.add_argument('-beta1', type = float, default = 0.5, help ="Beta1 adam optimizer")
-parser.add_argument('-i', type = int, default = 128, help = "image size, default = 128")
+parser.add_argument('-image_size', type = int, default = 128, help = "image size, default = 128")
 parser.add_argument('-k', type = int, default = 1, help = "Hyperparameter training the discriminator")
 parser.add_argument('-checkpoint', type = int, default =5, help = "Checkpoint epochs")
+parser.add_argument('--bsize', type = int, default =128, help = "Batch_size")
 args = parser.parse_args()
 
 print("\n")
-print("PARAMETERS")
+print("PARAMETERS:")
 for arg in vars(args):
     if(arg == "e"):
-        print("epochs.ljust(3)",getattr(args, arg))
+        print("epochs".ljust(12),getattr(args, arg))
     else:
-        print(arg.ljust(3), getattr(args, arg))
+        print(arg.ljust(12), getattr(args, arg))
 #------------------------------------------------
 
 ngpu = args.ngpu
@@ -60,9 +61,10 @@ ngpu = args.ngpu
 nz = 100
 nc = 3
 epochs = args.e
-image_size = args.i
+image_size = args.image_size
 ndf = image_size
 ngf = image_size
+batch_size = args.bsize
 #------------------------------------------------
 
 # Hyper parameters
@@ -74,7 +76,7 @@ beta1 = args.beta1
 
 #------------------------------------------------
 # one-sided smoothing i.e. real is in (0.85,1.15)
-oss = args.oss
+oss = args.one_sided
 
 if(oss == False):
     real = 1
@@ -86,15 +88,13 @@ false = 0
 #SETUP
 #------------------------------------------------
 # Images
-dataloader = load_data.main(image_size)
+dataloader = load_data.main(image_size,batch_size)
 
 
-print(torch.cuda.device_count())
 # CUDA support -> if ngpu > 0 & Cuda is available
 device = torch.device("cuda:0" if(
     torch.cuda.is_available() and ngpu > 0) else "cpu")
-
-
+    
 # Initialize the trainable params as stated in DCGAN paper (Radford, 2016)
 
 def init_weights(model):
@@ -132,7 +132,7 @@ gif_noise =torch.randn(128,nz,1,1,device = device)
 
 #TRAINING
 #------------------------------------------------
-images = []
+imagelist = []
 lossG = []
 lossD = []
 iterations = 0
@@ -210,8 +210,8 @@ for e in range(epochs):
             if(i % 500):
                 try:
                     with torch.no_grad():
-                        fake_images = Generator(noise).detach().cpu()
-                    images.append(vutils.make_grid(
+                        fake_images = Generator(gif_noise).detach().cpu()
+                    imagelist.append(vutils.make_grid(
                         fake_images, padding=2, normalize=True))
                 except:
                     print("couldnt append images")
@@ -219,7 +219,7 @@ for e in range(epochs):
 # ---------------------------------------------------
 # Training done-> printint the results
 # Loss
-plt.figure(figsize=(10, 10))
+plt.figure(figsize=(10, 7))
 plt.title("Loss Generator and Discriminator")
 plt.plot(lossD, label="Discriminator Loss")
 plt.plot(lossG, label="Generator Loss")
@@ -236,20 +236,20 @@ except:
 try:
     fig = plt.figure(figsize = (16,16))
     plt.axis("off")
-    im = [[plt.imshow(np.transpose(i,(1,2,0)), animated=True)] for i in images]
+    im = [[plt.imshow(np.transpose(i,(1,2,0)), animated=True)] for i in imagelist]
     ani = animation.ArtistAnimation(fig,im,interval = 1000, repeat_delay = 1000, blit = True)
-    ani.save('/Users/HenrikGruner/code/DATA/Training/animation.gif', writer='imagemagick', fps=5)
+    ani.save('Training/animation.gif', writer='imagemagick', fps=5)
     HTML(ani.to_jshtml())
-    plt.savefig("/Users/HenrikGruner/code/DATA/Training/anim.png128-15")
+    plt.savefig("Training/anim.png128-15")
 except:
     print("couldnt save gif")
-    for image in images:
+    for image in imagelist:
         i = 0
         plt.figure(figsize=(128*128/92, 128*128/92))
         plt.axis("off")
         plt.imshow(np.transpose(image, (1, 2, 0)))
         plt.savefig(
-            "/Users/HenrikGruner/code/DATA/Training/128-55-"+str(i)+".png")
+            "Training/128-55-"+str(i)+".png")
         plt.close()
         i+=1
 
@@ -267,9 +267,9 @@ plt.show()
 plt.subplot(1,2,2)
 plt.axis("off")
 plt.title("Fake Images")
-plt.imshow(np.transpose(img_list[-1],(1,2,0)))
+plt.imshow(np.transpose(imageelist[-1],(1,2,0)))
 plt.show()
 
-plt.savefig('/Users/HenrikGruner/code/DATA/Training/RealAndFake128-15.png')
+plt.savefig('Training/RealAndFake128-15.png')
 
 
