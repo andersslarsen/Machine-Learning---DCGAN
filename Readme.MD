@@ -32,9 +32,10 @@ python3 train.py [-ngpu] [-e ] [-lrd] [-lrg ] [-one_sided] [-lr][-beta1] [-image
 <li>bzise - number of images per training iteration - 128
 </ul>
 
-Training output when strating the training:
+### Training output when strating the training:
 PARAMETERS:
 ngpu         1
+
 epochs       2
 lrd          5e-05
 lrg          0.003
