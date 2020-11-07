@@ -5,7 +5,6 @@ import os
 import argparse
 
 # TORCHVISION IMPORTS
-
 import torch
 import torch.nn as nn
 import torchvision
