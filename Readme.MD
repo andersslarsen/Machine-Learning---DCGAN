@@ -12,22 +12,22 @@ Requirements.txt are not yet set up. To run in terminal type with the following 
 python3 train.py [-ngpu] [-e ] [-lrd] [-lrg ] [-one_sided] [-lr][-beta1] [-image_size ] [-k]  [-checkpoint] [--bsize]
 ```
 <ul>
+<li>Argument - Description - Default value
+<li>ngpu - number of gpus - 5
 
-<li>ngpu - number of gpus - default = 1<
+<li>e - epochs - default - 5
 
-<li>e - epochs - default = 5<
+<li>lrd - Learning rate discriminator - 0.0005
 
-<li>lrd - learning rate discriminator - default 0.0005
+<li>lrg - Learning rate discriminator - 0.003
 
-<li>lrg - learning rate discriminator - default 0.003
+<li>beta1 - Adam optimizer beta 1 - 0.5
 
-<li>beta1 - beta1 for Adam - default 0.5
+<li>image_size - image_size  for training - 128
 
-<li>image_size - default 128
+<li>k - hyperparameter for training discriminator - 1
 
-<li>k - hyperparameter for training discriminator
+<li>checkpoint - saves model per checkpoint - 1
 
-<li>checkpoint - saves model per checkpoint - default = 5
-
-<li>bzise - batch_size - default = 128
+<li>bzise - number of images per training iteration - 128
 </ul>
