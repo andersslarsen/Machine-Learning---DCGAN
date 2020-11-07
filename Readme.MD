@@ -11,7 +11,7 @@ Requirements.txt are not yet set up. To run in terminal type with the following 
 ```
 python3 train.py [-ngpu] [-e ] [-lrd] [-lrg ] [-one_sided] [-lr][-beta1] [-image_size ] [-k]  [-checkpoint] [--bsize]
 ```
-<ul>
+<ol>
 
 <li>ngpu - number of gpus - default = 1<li>
 
@@ -30,4 +30,4 @@ python3 train.py [-ngpu] [-e ] [-lrd] [-lrg ] [-one_sided] [-lr][-beta1] [-image
 <li>checkpoint - saves model per checkpoint - default = 5<li>
 
 <li>bzise - batch_size - default = 128<li>
-</ul>
+</ol>
