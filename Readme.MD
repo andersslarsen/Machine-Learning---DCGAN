@@ -1,21 +1,3 @@
-<style TYPE="text/css">
-code.has-jax {font: inherit; font-size: 100%; background: inherit; border: inherit;}
-</style>
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-    tex2jax: {
-        inlineMath: [['$','$'], ['\\(','\\)']],
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'] // removed 'code' entry
-    }
-});
-MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i = 0; i < all.length; i += 1) {
-        all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-});
-</script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML-full"></script>
 
 
 # Deep Convolutional Generative Adversarial Network
@@ -26,6 +8,7 @@ The discriminator is a Convolutional Neural Network (CNN). It consists of either
 
 ## Generator
 The Generator is also a CNN, but in "reverse" (so called Deconvolutional Neural Network). The input is a nose vector $z \sim \matchal{N}(\mu = 0,\theta ^2 = 0.02)$, based upon the guidance of Radford, 2016.$ 
+    h<sub>&theta;</sub>(x) = &theta;<sub>o</sub> x + &theta;<sub>1</sub>x
 
 \\[ z \sim \matchal{N}(\mu = 0,\theta ^2 = 0.02) \\]
 ## Training the model:
