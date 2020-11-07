@@ -1,8 +1,3 @@
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
-
-$$
-z \sim \mathcal{N}(\mu = 0,\theta^2 = 1
-$$
 
 # Deep Convolutional Generative Adversarial Network
 A DCGAN consists of two neural networks: A discriminator and generator. The generator tries to create synthetic data instances based upon a dataset. The discriminators role is to distinguish the real data from the generated one. 
@@ -11,10 +6,8 @@ A DCGAN consists of two neural networks: A discriminator and generator. The gene
 The discriminator is a Convolutional Neural Network (CNN). It consists of either 5 or 6 layers, depending on the image size trained on. Batchnormalization is used on every layer, and Leaky Relu is the activation function. THe output is a single scalar, representing the probability of x being from the real dataset.
 
 ## Generator
-The Generator is also a CNN, but in "reverse" (so called Deconvolutional Neural Network). The input is a nose vector $z \sim \matchal{N}(\mu = 0,\theta ^2 = 0.02)$, based upon the guidance of Radford, 2016.$ 
-    h<sub>&theta;</sub>(x) = &theta;<sub>o</sub> x + &theta;<sub>1</sub>x
+The Generator is also a CNN, but in "reverse" (so called Deconvolutional Neural Network). The input is a nose vector z &sim; &Nscr;(0,1), based upon the guidance of Radford, 2016.
 
-\\[ z \sim \matchal{N}(\mu = 0,\theta ^2 = 0.02) \\]
 ## Training the model:
 Requirements.txt are not yet set up. To run in terminal type with the following argument parsers:
 ```
