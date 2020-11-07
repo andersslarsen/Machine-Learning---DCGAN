@@ -1,3 +1,5 @@
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
 $$
 z \sim \mathcal{N}(\mu = 0,\theta^2 = 1
 $$
