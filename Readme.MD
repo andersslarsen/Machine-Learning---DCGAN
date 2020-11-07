@@ -56,6 +56,10 @@ Starting the training procedure
 
 [21:18:49][0/2][200/1583]   6.6 minutes since start 
  Loss G = 10.320  loss D = 2.486 D(x) = 2.259 D(G(z)) = -9.418 / -11.456
+.
+.
+.
+
 ```
 
 
