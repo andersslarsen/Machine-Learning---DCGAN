@@ -33,29 +33,19 @@ python3 train.py [-ngpu] [-e ] [-lrd] [-lrg ] [-one_sided] [-lr][-beta1] [-image
 </ul>
 
 ### Training output when strating the training:
+```
 PARAMETERS:
 ngpu         1
-
 epochs       2 
-
 lrd          5e-05
-
 lrg          0.003
-
 one_sided    True
-
 lr           False
-
 beta1        0.5
-
 image_size   128
-
 k            1
-
 checkpoint   5
-
 bsize        128
-
 Starting the training procedure
 
 [21:12:17][0/2][0/1583]   0.0 minutes since start 
@@ -66,6 +56,6 @@ Starting the training procedure
 
 [21:18:49][0/2][200/1583]   6.6 minutes since start 
  Loss G = 10.320  loss D = 2.486 D(x) = 2.259 D(G(z)) = -9.418 / -11.456
-
+```
 
 
