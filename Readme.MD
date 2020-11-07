@@ -8,5 +8,6 @@ The Generator is also a CNN, but in "reverse" (so called Deconvolutional Neural 
 
 ## Training the model:
 Requirements.txt are not yet set up. To run in terminal type with the following argument parsers:
+```
 python3 train.py [-i (image size)] [-e (epochs)] [-lrd (learning rate discriminator)] [-lrg (learning rate generator)] [-lr (boolean (same learning rate for both, default = 0.0002))] [-k (discriminator hyperparameter)] 
-
+```
