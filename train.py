@@ -254,7 +254,7 @@ except:
 
 real = next(iter(dataloader))
 #Real images
-plt.figure(figsize=(32,32))
+plt.figure(figsize=(64,64))
 plt.subplot(1,2,1)
 plt.axis("off")
 plt.title("Real Images")
