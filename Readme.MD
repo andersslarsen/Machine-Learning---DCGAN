@@ -6,7 +6,7 @@ A DCGAN consists of two neural networks: A discriminator and generator. The gene
 The discriminator is a Convolutional Neural Network (CNN). It consists of either 5 or 6 layers, depending on the image size trained on. Batchnormalization is used on every layer, and Leaky Relu is the activation function. THe output is a single scalar, representing the probability of x being from the real dataset.
 
 ## Generator
-The Generator is also a CNN, but in "reverse" (so called Deconvolutional Neural Network). The input is a nose vector z &sim; &Nscr;(&mu;=0,&theta;^2 = 1), based upon the guidance of Radford, 2016. The output of the generator is a batch of images.
+The Generator is also a CNN, but in "reverse" (so called Deconvolutional Neural Network). The input is a nose vector z &sim; &Nscr;(&mu;=0,&theta;<sup>2 = 1), based upon the guidance of Radford, 2016. The output of the generator is a batch of images.
 
 ## Training the model:
 Requirements.txt are not yet set up. To run in terminal type with the following argument parsers:
