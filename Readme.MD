@@ -31,3 +31,34 @@ python3 train.py [-ngpu] [-e ] [-lrd] [-lrg ] [-one_sided] [-lr][-beta1] [-image
 
 <li>bzise - number of images per training iteration - 128
 </ul>
+
+Training output when strating the training:
+PARAMETERS:
+ngpu         1
+epochs       2
+lrd          5e-05
+lrg          0.003
+one_sided    True
+lr           False
+beta1        0.5
+image_size   128
+k            1
+checkpoint   5
+bsize        128
+Starting the training procedure
+[21:12:17][0/2][0/1583]   0.0 minutes since start 
+ Loss G = 11.316  loss D = 2.295 D(x) = 0.994 D(G(z)) = 0.772 / -12.562
+
+[21:15:32][0/2][100/1583]   3.3 minutes since start 
+ Loss G = 13.021  loss D = 5.194 D(x) = -1.009 D(G(z)) = -1.726 / -14.454
+
+[21:18:49][0/2][200/1583]   6.6 minutes since start 
+ Loss G = 10.320  loss D = 2.486 D(x) = 2.259 D(G(z)) = -9.418 / -11.456
+
+[21:22:05][0/2][300/1583]   9.8 minutes since start 
+ Loss G = 13.355  loss D = 1.875 D(x) = 6.081 D(G(z)) = -14.741 / -14.825
+
+[21:25:21][0/2][400/1583]   13.1 minutes since start 
+ Loss G = 24.623  loss D = 1.471 D(x) = 4.718 D(G(z)) = -26.899 / -27.333
+
+
