@@ -130,13 +130,13 @@ for e in range(current, args.e):
                 
                 print('[%s][%d/%d][%d/%d]   %.1f minutes since start \n Loss G = %.3f  loss D = %.3f D(x) = %.3f D(G(z)) = %.3f / %.3f\n' % (currtim, e,args.e,i,len(dataloader),timesince,errorG.item(),errorD.item(),Dx,Dz,Dz2))
 
-        if(i % 500):
+        if(i % 500==0):
             with torch.no_grad():
                 fake = gen(progress_gif_noise).detach().cpu()
                 img_list.append(vutils.make_grid(
                     fake, padding=2, normalize=True))
 
-        if(e % args.checkpoint):
+        if(e % args.checkpoint==0):
             if(e != current):
                 torch.save(dis.state_dict(), 'trained_models/modelD_' +
                            str(img_size) + '_'+str(args.e))

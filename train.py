@@ -206,7 +206,7 @@ for e in range(epochs):
             lossD.append(errorD)
             lossG.append(errorG)
 
-            if(i % 500):
+            if(i % 500==0):
                 try:
                     with torch.no_grad():
                         fake_images = Generator(gif_noise).detach().cpu()
