@@ -71,8 +71,8 @@ else:
 
 false_label = 0
 
-optimD = optim.Adam(dis.parameters(), lr=args.lrd, beta=(args.beta1, 0.999))
-optimG = optim.Adam(gen.parameters(), lr=args.lrg, beta=(args.beta1, 0.999))
+optimD = optim.Adam(dis.parameters(), lr=args.lrd, betas=(args.beta1, 0.999))
+optimG = optim.Adam(gen.parameters(), lr=args.lrg, betas=(args.beta1, 0.999))
 
 img_list = []
 G_losses = []
