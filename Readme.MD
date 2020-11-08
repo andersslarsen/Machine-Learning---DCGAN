@@ -63,5 +63,5 @@ Starting the training procedure
 ```
 
 # Results
-![title](RealAndFake128_50_git.png)
+![title](images_git/RealAndFake128_50_git.png)
 
