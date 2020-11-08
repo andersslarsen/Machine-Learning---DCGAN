@@ -61,6 +61,6 @@ Starting the training procedure
 ```
 
 # Results
-![title](RealAndFake128-60s.png)
+![title](RealAndFake128_50.png)
 
 
