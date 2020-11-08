@@ -17,19 +17,19 @@ def realnfake(image, image_size, epochs):
     plt.figure(figsize=(64, 64))
     plt.subplot(1, 2, 1)
     plt.axis("off")
-    plt.title("Real Images")
+    plt.title("Real Images", fontsize=100)
     plt.imshow(np.transpose(vutils.make_grid(real[0].to(device)[
                :128], padding=5, normalize=True).cpu(), (1, 2, 0)))
 
     img = vutils.make_grid(image, padding=2, normalize=True)
     img = img.detach().numpy()
     plt.subplot(1, 2, 2)
-    plt.title("Fake Images")
+    plt.title("Fake Images", fontsize=100)
     plt.axis("off")
     plt.imshow(np.transpose(img, (1, 2, 0)))
 
     plt.savefig('generated_images/RealAndFake' +
-                str(image_size) + "_" str(epochs) + '.png')
+                str(image_size) + "_" + str(epochs) + '.png')
     plt.close()
 
 

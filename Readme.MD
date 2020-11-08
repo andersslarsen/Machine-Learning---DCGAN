@@ -34,6 +34,8 @@ python3 train.py [-ngpu] [-e ] [-lrd] [-lrg ] [-one_sided] [-lr][-beta1] [-image
 <li>bzise - number of images per training iteration - 128
 </ul>
 
+There is no point trying to train the model without gpus. 
+
 ### Training output when starting the training:
 ```
 PARAMETERS:
