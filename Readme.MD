@@ -9,7 +9,9 @@ The discriminator is a Convolutional Neural Network (CNN). It consists of either
 The Generator is also a CNN, but in "reverse" (so called Deconvolutional Neural Network). The input is a nose vector z &sim; &Nscr;(&mu;=0,&theta;<sup>2</sup> = 1), based upon the guidance of Radford, 2016. The output of the generator is a batch of images.
 
 ## Training the model:
-Requirements.txt are not yet set up. To run in terminal type with the following argument parsers:
+Download all packages necessary using requirements.txt.
+You need to download the CelebA dataset, and change the filepath in load_data.py to your celeba folder.
+To run in terminal type with the following argument parsers:
 ```
 python3 train.py [-ngpu] [-e ] [-lrd] [-lrg ] [-one_sided] [-lr][-beta1] [-image_size ] [-k]  [-checkpoint] [--bsize]
 ```
@@ -64,4 +66,12 @@ Starting the training procedure
 
 # Results
 ![title](images_git/RealAndFake128_50_git.png)
+ ### Frèchet Inception Distance (FID)
+ The FID was calculated to be 14, using 12,8k real and generated images. 
 
+# References & help
+<ol>
+<li>Ian J. Goodfellow, Jean Pouget-Abadie, M. Mirza, Bing Xu, David Warde-Farley, Sherjil Ozair,
+Aaron C. Courville, and Yoshua Bengio. Generative adversarial nets. In NIPS, 2014.
+<li> Alec Radford, Luke Metz, and Soumith Chintala. Unsupervised representation learning with deepconvolutional generative adversarial networks, 2016.
+<li>https://pytorch.org/tutorials/beginner/dcgan_faces_tutorial.html
