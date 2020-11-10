@@ -67,7 +67,7 @@ Starting the training procedure
 # Results
 ![title](images_git/RealAndFake128_50_git.png)
  ### Fréchet Inception Distance (FID)
- The FID was calculated to be 14, using 12,8k real and generated images. To calulate the FID, we used mseitzers implementation with pytorch at https://github.com/mseitzer/pytorch-fid. 
+ The FID was calculated to be 14, using 5k real and generated images. To calulate the FID, mseitzers implementation with pytorch was used: https://github.com/mseitzer/pytorch-fid. 
 
 # References & help
 <ol>
