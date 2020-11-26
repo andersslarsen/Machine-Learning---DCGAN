@@ -81,6 +81,8 @@ class Discriminator(nn.Module):
             layers.append(nn.BatchNorm2d(ndf*16))
             layers.append(nn.LeakyReLU(0.2, inplace=True))
             layers.append(nn.Conv2d(ndf*16, 1, 4, 1, 0, bias=False))
+
+            
         else:
             layers.append(nn.Conv2d(ndf*8, 1, 4, 2, 0, bias=False))
             layers.append(nn.Sigmoid())
