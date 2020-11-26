@@ -23,7 +23,7 @@ python3 train.py [-ngpu] [-e ] [-lrd] [-lrg ] [-one_sided] [-lr][-beta1] [-image
 
 <li>lrd - Learning rate discriminator - 0.0005
 
-<li>lrg - Learning rate discriminator - 0.003
+<li>lrg - Learning rate discriminator - 0.002
 
 <li>beta1 - Adam optimizer beta 1 - 0.5
 
@@ -63,11 +63,31 @@ Starting the training procedure
 [21:18:49][0/2][200/1583]   6.6 minutes since start 
  Loss G = 10.320  loss D = 2.486 D(x) = 2.259 D(G(z)) = -9.418 / -11.456
 ```
+### Resume the training
+As train.py saves the models every check epoch, the training can be resumed using resume.py. Save the models in the a subfolder with the name:
+modelD_<img_size>_<epochs>, or modelG_<img_size>_<epochs>, e.g. modelG_128_5.
+
+It takes the same argument as above, with the addition of -curr, which corresponds to the number of epochs your model is. 
+```
+python3 resume_training.py [-curr] [-ngpu] [-e ] [-lrd] [-lrg ] [-one_sided] [-lr][-beta1] [-image_size ] [-k]  [-checkpoint] [--bsize]
+```
+### Generating new samples
+To generate new samples, the function new_samples.py is used. Use the same convention for the models as in resume
+```
+python3 newsamples.py [-e] [-img] [-g] [-r]
+```
+<li>e - epochs - default - 5
+
+<li> img - image size - default 128
+
+<li>g - grid (i.e. 1 for 128 images in a grid 0 for 128 seperate images)
+
+<li>r - create real and fake images in same image
 
 # Results
 ![title](images_git/RealAndFake128_50_git.png)
  ### Fréchet Inception Distance (FID)
- The FID was calculated to be 14, using 5k real and generated images. To calulate the FID, mseitzers implementation with pytorch was used: https://github.com/mseitzer/pytorch-fid. 
+ The FID was calculated to be 10.293, using 12.8k real and generated images. To calulate the FID, mseitzers implementation with pytorch was used: https://github.com/mseitzer/pytorch-fid. 
 
 # References & help
 <ol>
