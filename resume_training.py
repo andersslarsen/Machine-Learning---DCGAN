@@ -9,11 +9,13 @@ import time
 import argparse
 from datetime import datetime
 import random
+import math
+import numpy as np
 
 parser = argparse.ArgumentParser(description='Hyperparameters')
 parser.add_argument('-ngpu', type=int, default=1,
                     help='Number of gpus for CUDA, default = 1')
-parser.add_argumer('-curr', type=int, help="Current epochs")
+parser.add_argument('-curr', type=int, help="Current epochs")
 parser.add_argument('-e', type=int, default=50,
                     help="Number of epochs in total")
 parser.add_argument('-lrd', type=float, default=0.00005,
@@ -39,12 +41,13 @@ img_size = args.i
 ndf = img_size
 ngf = img_size
 current = args.curr
+k = args.k
 
 device = torch.device("cuda:0" if (
     torch.cuda.is_available() and ngpu > 0) else "cpu")
 dataloader = load_data.main(128)
 
-filepath = 'trained_models/model'
+filepath = 'Training/model'
 gen = models.Generator(ngpu, ngf)
 dis = models.Discriminator(ngpu, ndf)
 try:
@@ -53,21 +56,26 @@ try:
     dis.load_state_dict(torch.load(
         filepath + "D_"+str(img_size)+"_" + str(current), map_location=device))
 except:
+    print(current)
+    print(img_size)
     print("Models does not exist")
     exit()
 
+
+dis.to(device)
+gen.to(device)
+
+
 nz = 100
-if(args.epochs == 128):
+if(args.i == 128):
     criterion = nn.BCEWithLogitsLoss()
 else:
     criterion = nn.BCELoss()
 
 progress_gif_noise = torch.randn(128, nz, 1, 1, device=device)
 
-if(args.one_sided == True):
-    real_label = random.uniform(0.85, 1.15)
-else:
-    real_label = 1
+
+real_label = random.uniform(0.9, 1.1)
 
 false_label = 0
 
@@ -77,57 +85,68 @@ optimG = optim.Adam(gen.parameters(), lr=args.lrg, betas=(args.beta1, 0.999))
 img_list = []
 G_losses = []
 D_losses = []
+Dx_list = []
+Dz_list = []
+Dz2_list = []
 iters = 0
+
+def sigmoid(x):
+    return 1 / (1 + math. exp(-x))
 
 start = time.time()
 print("Resuming the training procedure")
 print("Current epoch:" + str(args.curr))
 
 for e in range(current, args.e):
-    for i, data in enumerate(dataloder, 0):
-        for k in range(k):
-            dis.zero_grad()
-            # Sample real batch x
-            real_batch = data[0].to(device)
-            b_size = real_batch.size(0)
-            label = torch.full((b_size,), real_label,
+    for i, data in enumerate(dataloader, 0):
+       
+        dis.zero_grad()
+        # Sample real batch x
+        real_batch = data[0].to('cuda:0')
+        b_size = real_batch.size(0)
+        label = torch.full((b_size,), real_label,
                                dtype=torch.float, device=device)
 
-            output = dis(real).view(-1)
-            error_real_D = criterion(output, label)
-            error_real_D.backward()
-            Dx = output.mean().item()
-
-            # Sample batch z of noise
-            noise = torch.randn(b_size, nz, 1, 1, device=device)
-            fake = gen(noise)
-            label.fill_(false_label)
-            output = dis(fake.detach()).view(-1)
-            error_fake_D = criterion(output, label)
-            error_fake_D.backward()
-            Dz = output.mean().item()
-            errorD = error_fake_D + error_real_D
-            optimD.step()
-
+        output = dis(real_batch).view(-1)
+            
+        error_real_D = criterion(output, label)
+        error_real_D.backward()
+            
+        Dx = sigmoid(output.mean().item())
+        Dx_list.append(Dx)
+        # Sample batch z of noise
+        noise = torch.randn(b_size, nz, 1, 1, device=device)
+        fake = gen(noise).to(device)
+        label.fill_(false_label)
+        output = dis(fake.detach()).view(-1)
+        error_fake_D = criterion(output, label)
+        error_fake_D.backward()
+        Dz = sigmoid(output.mean().item())
+        Dz_list.append(Dz)  
+        errorD = error_fake_D + error_real_D
+    
+        optimD.step()
+    
         # Generator
         gen.zero_grad()
         label.fill_(real_label)
-
-        output = dis(fake).view(-1)
+        
+        output = dis(fake.to(device)).view(-1)
         errorG = criterion(output, label)
         errorG.backward()
-        Dz2 = output.mean().item()
+        
+        Dz2 = sigmoid(output.mean().item())
+        Dz2_list.append(Dz2)
         optimG.step()
-
+     
         # Loss
-        G_losses.append(errorG)
-        D_losses.append(errorD)
+        G_losses.append(errorG.item())
+        D_losses.append(errorD.item())
 
         # Printing
         if i % 100 == 0:
                 currtim = datetime.now().strftime('%H:%M:%S')
                 timesince = (time.time()-start)/60
-                
                 print('[%s][%d/%d][%d/%d]   %.1f minutes since start \n Loss G = %.3f  loss D = %.3f D(x) = %.3f D(G(z)) = %.3f / %.3f\n' % (currtim, e,args.e,i,len(dataloader),timesince,errorG.item(),errorD.item(),Dx,Dz,Dz2))
 
         if(i % 500==0):
@@ -136,16 +155,22 @@ for e in range(current, args.e):
                 img_list.append(vutils.make_grid(
                     fake, padding=2, normalize=True))
 
-        if(e % args.checkpoint==0):
-            if(e != current):
-                torch.save(dis.state_dict(), 'trained_models/modelD_' +
-                           str(img_size) + '_'+str(args.e))
-                torch.save(gen.state_dict(), 'trained_models/modelG_' +
-                           str(img_size)+'_' + str(args.e))
+    if(e % args.checkpoint ==0 or e == args.e-1):
+        if(e != current):
+            torch.save(dis.state_dict(), 'Training/modelD_' +
+                           str(img_size) + '_'+str(e))
+            torch.save(gen.state_dict(), 'Training/modelG_' +
+                           str(img_size)+'_' + str(e))
+            np.savetxt("lossG_"+str(current)+"-"+str(e)+".csv", G_losses, header = "image_sz:"+str(img_size)+"epochs:"+str(e), delimiter = ",")
+            np.savetxt("lossD"+str(current)+"-"+str(e)+".csv", D_losses, header = "image_sz:"+str(img_size)+"epochs:"+str(e), delimiter = ",")
+            np.savetxt("Dx_"+str(current)+"-"+str(e)+".csv", Dx_list, header = "image_sz:"+str(img_size)+"epochs:"+str(e), delimiter = ",")
+            np.savetxt("Dz_"+str(current)+"-"+str(e)+".csv", Dz_list, header = "image_sz:"+str(img_size)+"epochs:"+str(e), delimiter = ",")
+            np.savetxt("Dz2_"+str(current)+"-"+str(e)+".csv",Dz2_list, header = "image_sz:"+str(img_size)+"epochs:"+str(e), delimiter = ",")
+
 
 
 end_time = (time.time() - start) / 60
-print("The training took :" + end_time + " Minutes")
+print("The training took :" + str(end_time) + " Minutes")
 
 
 plt.figure(figsize=(10, 5))
@@ -156,7 +181,7 @@ plt.xlabel("iterations")
 plt.ylabel("Loss")
 plt.legend()
 plt.show()
-plt.savefig("generated_images/LOSS_"+ str(img_size) + "_" + str(args.e)+".png")
+plt.savefig("Training/LOSS_"+ str(img_size) + "_" + str(args.e)+".png")
 
 
 
@@ -167,9 +192,9 @@ try:
            for i in img_list]
     ani = animation.ArtistAnimation(
         fig, ims, interval=1000, repeat_delay=1000, blit=True)
-    ani.save('generated_images/animation_'+ str(img_size) + "_" + str(args.e)+'.gif', writer='imagemagick', fps=5)
+    ani.save('Training/animation_'+ str(img_size) + "_" + str(args.e)+'.gif', writer='imagemagick', fps=5)
     HTML(ani.to_jshtml())
-    plt.savefig("generated_images/anim_" + str(img_size) + "_" + str(args.e)+".png")
+    plt.savefig("Training/anim_" + str(img_size) + "_" + str(args.e)+".png")
 except:
     print('couldnt save gif')
 
@@ -190,4 +215,4 @@ plt.title("Fake Images")
 plt.imshow(np.transpose(img_list[-1], (1, 2, 0)))
 plt.show()
 
-plt.savefig('generated_images/RealAndFake_' + str(img_size)+ '_'+str(args.e)+'.png')
+plt.savefig('Training/RealAndFake_' + str(img_size)+ '_'+str(args.e)+'.png')
