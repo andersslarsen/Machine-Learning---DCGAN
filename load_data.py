@@ -4,14 +4,13 @@ import torchvision.datasets as datasets
 import torchvision.transforms as transforms
 
 
-def main(size):
+def main(size, batch_size=128):
     """Extracts the images from the CelebA data set and outputs a dataloader (in tensorform).
     It also normalizes the images, and crops them to the image size given.
     Batch-size is set to 128. """
 
-    dataroot = '/Users/HenrikGruner/code/TDT4173/celaba'
+    dataroot = '../celeba/archive/img_align_celeba'
     image_size = size
-    batch_size = 128
     dataset = datasets.ImageFolder(root=dataroot,
                                    transform=transforms.Compose([
                                        transforms.Resize(image_size),
